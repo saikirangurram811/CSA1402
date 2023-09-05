@@ -1,19 +1,22 @@
 %{
-int nchar, nword, nline;
+int nlines,nwords,nchars;
 %}
+
 %%
-\n { nline++; nchar++; }
-[^ \t\n]+ { nword++, nchar += yyleng; }
-. { nchar++; }
+\n {
+	nchars++;nlines++; 
+	}
+
+[^ \n\t]+ {nwords++, nchars=nchars+yyleng;}
+. {nchars++;}
+
 %%
-int yywrap(void) {
-return 1;
-}
-int main(int argc, char *argv[]) {
-yyin = fopen(argv[1], "r");
-yylex();
-printf("Number of characters = %d\n", nchar);
-printf("Number of words = %d\n", nword);
-printf("Number of lines = %d\n", nline);
-fclose(yyin);
+
+int yywrap(void) {}
+int main() 
+{
+ yylex();
+ printf("Lines = %d\nChars=%d\nWords=%d",nlines,nchars,nwords);
+
+ return 0;
 }
